@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title> ScoreGraph  - {{ title }}</title>
+  <link href="{{ url_for('static', filename='styles/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+    <!-- Custom CSS -->
+  <link href="{{ url_for('static', filename='styles/styles.css') }}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+{% block body %}
+{% endblock %}
+<script src="{{ url_for('static', filename='js/d3.v3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
