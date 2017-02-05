@@ -1,6 +1,46 @@
 {% extends 'base.html' %}
 {% block body %}
+{% for game in games %}
+<h1 class='header'>{{ game["TEAM_1_CITY_NAME"] }} vs {{ game["TEAM_2_CITY_NAME"] }}</h1>
+<h2 class='subhead'>{{ pretty_date_today }}</h2>
 
-<h1 class='header'>Los Angeles Lakers vs Golden State Warriors</h1>
-<h2 class='subhead'>November 4, 2016</h2>
+<div class="container">
+
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="list-group">
+                
+                        <a class="score-boxes list-group-item list-group-item-action" href="/boxscores/{{ game["GAME_ID"] }}">
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    {{ game["TEAM_1_ABBREVIATION"] }} {{ game["TEAM_1_PTS"] }}
+                                    <br>
+                                    {{ game["TEAM_1_WINS_LOSSES"] }}
+                                </div>
+                                <div class="col-xs-4">
+                                    -&nbsp;
+                                </div>
+                                <div class="col-xs-4">
+                                    {{ game["TEAM_2_ABBREVIATION"] }} {{ game["TEAM_2_PTS"] }}
+                                    <br>
+                                    {{ game["TEAM_2_WINS_LOSSES"] }}
+                                </div>
+                            </div>
+                        </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<script type="text/javascript">
+    var dataset = [
+    {label:"1st", "{{ game["TEAM_1_ABBREVIATION"] }}":{{ game['TEAM_1_PTS_QTR1'] }}, "{{ game["TEAM_2_ABBREVIATION"] }}": {{ game['TEAM_2_PTS_QTR1'] }} },
+    {label:"2nd", "{{ game["TEAM_1_ABBREVIATION"] }}":{{ game['TEAM_1_PTS_QTR2'] }}, "{{ game["TEAM_2_ABBREVIATION"] }}": {{ game['TEAM_2_PTS_QTR2'] }} },
+    {label:"3rd", "{{ game["TEAM_1_ABBREVIATION"] }}":{{ game['TEAM_1_PTS_QTR3'] }}, "{{ game["TEAM_2_ABBREVIATION"] }}": {{ game['TEAM_2_PTS_QTR3'] }} },
+    {label:"4th", "{{ game["TEAM_1_ABBREVIATION"] }}":{{ game['TEAM_1_PTS_QTR4'] }}, "{{ game["TEAM_2_ABBREVIATION"] }}":{{ game['TEAM_2_PTS_QTR4'] }} },
+    {label:"Final", "{{ game["TEAM_1_ABBREVIATION"] }}":{{ game['TEAM_1_PTS'] }}, "{{ game["TEAM_2_ABBREVIATION"] }}":{{ game['TEAM_2_PTS'] }} },
+
+];
+{% endfor %}
+</script>
 {% endblock %}

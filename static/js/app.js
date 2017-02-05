@@ -29,14 +29,7 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-dataset = [
-    {label:"1st", "Lakers":24, "Warriors":15},
-    {label:"2nd", "Lakers":41, "Warriors":34},
-    {label:"3rd", "Lakers":28, "Warriors":34},
-    {label:"4th", "Lakers":24, "Warriors":15},
-    {label:"Final", "Lakers":117, "Warriors":97},
 
-];
 
 function colors(name) {
     if (name === 'Lakers') {
