@@ -7,7 +7,7 @@ import nba_py
 app = Flask(__name__)
 
 
-@app. route('/')
+@app.route('/')
 def index():
 
     datetime_today = datetime.today()
@@ -16,6 +16,18 @@ def index():
     return render_template('index.html',
                            title="Daily Scores",
                            games=games,
+                           pretty_date_today=pretty_date_today)
+
+
+@app.route('/game/<game_id>')
+def game(game_id):
+
+    datetime_today = datetime.today()
+    pretty_date_today = datetime_today.strftime('%b %d, %Y')
+    game = get_game_data(game_id, datetime_today)
+    return render_template('game.html',
+                           title="Daily Scores",
+                           game=game,
                            pretty_date_today=pretty_date_today)
 
 
@@ -38,6 +50,39 @@ def get_games(date):
             current_game['TEAM_1_ABBREVIATION'] = team['TEAM_ABBREVIATION']
             current_game['TEAM_1_CITY_NAME'] = team['TEAM_CITY_NAME']
             current_game['TEAM_1_ID'] = team['TEAM_ID']
+            current_game['TEAM_1_PTS'] = team['PTS']
+
+            current_game_sequence = team['GAME_SEQUENCE']
+            game_sequence_counter += 1
+        elif (game_sequence_counter == 1):
+            current_game['TEAM_2_ABBREVIATION'] = team['TEAM_ABBREVIATION']
+            current_game['TEAM_2_CITY_NAME'] = team['TEAM_CITY_NAME']
+            current_game['TEAM_2_ID'] = team['TEAM_ID']
+
+            current_game['TEAM_2_PTS'] = team['PTS']
+            current_game['GAME_ID'] = team['GAME_ID']
+
+            games.append(current_game)
+            current_game = {}
+            game_sequence_counter = 0
+    return games
+
+
+def get_game_data(game_id, date):
+    scoreboard = nba_py.Scoreboard(
+        month=date.month,
+        day=date.day,
+        year=date.year)
+    line_score = scoreboard.line_score()
+
+    current_game = {}
+
+    game_sequence_counter = 0
+    for team in line_score:
+        if (team['GAME_ID'] == game_id and game_sequence_counter != 1):
+            current_game['TEAM_1_ABBREVIATION'] = team['TEAM_ABBREVIATION']
+            current_game['TEAM_1_CITY_NAME'] = team['TEAM_CITY_NAME']
+            current_game['TEAM_1_ID'] = team['TEAM_ID']
 
             current_game['TEAM_1_WINS_LOSSES'] = team['TEAM_WINS_LOSSES']
             current_game['TEAM_1_PTS'] = team['PTS']
@@ -46,9 +91,8 @@ def get_games(date):
             current_game['TEAM_1_PTS_QTR3'] = team['PTS_QTR3']
             current_game['TEAM_1_PTS_QTR4'] = team['PTS_QTR4']
 
-            current_game_sequence = team['GAME_SEQUENCE']
             game_sequence_counter += 1
-        elif (game_sequence_counter == 1):
+        elif (team['GAME_ID'] == game_id and game_sequence_counter == 1):
             current_game['TEAM_2_ABBREVIATION'] = team['TEAM_ABBREVIATION']
             current_game['TEAM_2_CITY_NAME'] = team['TEAM_CITY_NAME']
             current_game['TEAM_2_ID'] = team['TEAM_ID']
@@ -61,14 +105,9 @@ def get_games(date):
             current_game['TEAM_2_PTS_QTR4'] = team['PTS_QTR4']
             current_game['GAME_ID'] = team['GAME_ID']
 
-            games.append(current_game)
             break
-            current_game = {}
             game_sequence_counter = 0
-    return games
-
-
-
+    return current_game
 
 
 if __name__ == '__main__':
